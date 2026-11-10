@@ -77,6 +77,8 @@ export const AskTheDataBox: React.FC<AskTheDataBoxProps> = ({ stats, comparables
             unlicensedCount: stats.unlicensedCount,
             unlicensedMedianPrice: stats.unlicensedMedianPrice,
             unlicensedMedianRevenue: stats.unlicensedMedianRevenue,
+            propertyTypeCounts: stats.propertyTypeCounts,
+            commonPropertyTypes: stats.commonPropertyTypes,
           },
           sampleRows,
         }),

@@ -127,12 +127,13 @@ app.post('/api/ask-data', async (req: Request, res: Response) => {
     const systemInstruction = `You are Capital Host Advisory's Washington DC Short-Term Rental Data Analyst.
 You are assisting a homeowner with questions about the Inside Airbnb Washington DC dataset (snapshot 19 Sept 2026, CC BY 4.0).
 
-STRICT RULE ON NUMBERS:
-- Every price, count, percentile, or estimate shown MUST be computed in code and passed to you in the prompt below.
-- You may ONLY explain numbers that the code passes to you.
+STRICT RULE ON NUMBERS & DATA BOUNDARY:
+- Every price, count, percentile, estimate, or property type count shown MUST be computed in code and passed to you in the prompt below.
+- You may ONLY explain or cite numbers that the code passes to you.
 - You must NEVER state a price, count, or statistic from your own outside knowledge.
-- If asked for something that was not passed in (e.g. historical trends before the snapshot, cap rates not in data, specific addresses, non-DC cities, or metrics absent from the stats), you MUST explicitly state "not in the data" or "That information is not in the data provided."
-- Be objective, clear, professional, and concise.`;
+- If asked for something that was not provided in the prompt below (e.g. historical trends before the snapshot, cap rates, host names, square footage, specific street addresses, non-DC cities, amenities not listed, or any metric not passed in), you MUST state "not in the data provided" and you must NOT repeat the price statistics.
+- If asked about property types, answer accurately using the PROPERTY TYPE COUNTS provided below.
+- Be objective, clear, direct, and concise.`;
 
     const prompt = `CURRENT COMPUTED DATASET FILTER & METRICS:
 Neighbourhood: ${stats.neighbourhood}
@@ -151,6 +152,9 @@ Excluded for needing 31+ nights: ${stats.excluded31PlusCount}
 Excluded for blank/missing minimum nights: ${stats.blankMinNightsCount}
 Total listings in neighbourhood with matching bedroom count: ${stats.totalAreaBedroomCount}
 
+PROPERTY TYPE COUNTS IN CURRENT COMPARABLES (N = ${stats.count}):
+${JSON.stringify(stats.propertyTypeCounts || {}, null, 2)}
+
 LICENSING BREAKDOWN IN CURRENT COMPARABLES:
 - Licensed listings: ${stats.licensedCount}
   - Median Nightly Price: $${Number(stats.licensedMedianPrice).toFixed(2)}
@@ -165,14 +169,14 @@ ${JSON.stringify(sampleRows, null, 2)}
 USER QUESTION:
 "${question}"
 
-Answer the user's question directly, observing the strict rule on numbers:`;
+Answer the user's question directly, observing the strict rule on numbers. If the question asks for something not provided above, say "not in the data provided" and do not repeat the price statistics:`;
 
     const response = await ai.models.generateContent({
       model: 'gemini-3.8-flash',
       contents: prompt,
       config: {
         systemInstruction,
-        temperature: 0.2,
+        temperature: 0.1,
       },
     });
 
@@ -180,8 +184,17 @@ Answer the user's question directly, observing the strict rule on numbers:`;
   } catch (error: any) {
     console.error('Error in ask-data, returning deterministic answer:', error);
     const { stats, question } = req.body;
+    const qLower = (question || '').toLowerCase();
+    if (qLower.includes('property') || qLower.includes('type')) {
+      const typesStr = Object.entries(stats?.propertyTypeCounts || {})
+        .map(([t, c]) => `${t}: ${c}`)
+        .join(', ');
+      return res.json({
+        answer: `The ${stats?.count || 0} comparables include the following property types: ${typesStr || 'Various units'}.`,
+      });
+    }
     return res.json({
-      answer: `Based strictly on the computed data for ${stats?.neighbourhood || 'the selected neighbourhood'} (${stats?.bedrooms === 0 ? 'Studio' : `${stats?.bedrooms}-bedroom`} entire property, <= ${stats?.minNightsCap} nights): The sample contains ${stats?.count} comparables with a median recommended rate of $${Number(stats?.median || 0).toFixed(2)}/night (25th percentile: $${Number(stats?.p25 || 0).toFixed(2)}, 75th percentile: $${Number(stats?.p75 || 0).toFixed(2)}). All ${stats?.licensedCount || 0} active comparables hold a DC license. If your inquiry regarding "${question}" asks for metrics beyond these computed figures, that information is not in the data.`,
+      answer: 'not in the data provided',
     });
   }
 });

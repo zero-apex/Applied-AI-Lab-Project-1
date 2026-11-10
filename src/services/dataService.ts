@@ -49,7 +49,15 @@ export interface ComparableStats {
   unlicensedMedianPrice: number;
   unlicensedMedianRevenue: number;
   
-  // Common property types in this comparable slice
+  // Median estimated annual revenue across all N comparables
+  comparablesMedianRevenue: number;
+
+  // Full dataset licensing counts computed from all listings
+  totalDatasetUnlicensedCount: number;
+  totalDatasetUnlicensed31PlusCount: number;
+
+  // Property type counts in this comparable slice
+  propertyTypeCounts: Record<string, number>;
   commonPropertyTypes: string[];
 }
 
@@ -299,8 +307,16 @@ export function computeComparableStats(
 
   const licensedRevenues = licensedListings.map((c) => c.estimated_revenue_l365d).sort((a, b) => a - b);
   const unlicensedRevenues = unlicensedListings.map((c) => c.estimated_revenue_l365d).sort((a, b) => a - b);
+  const allComparablesRevenues = comparables.map((c) => c.estimated_revenue_l365d).sort((a, b) => a - b);
+  const comparablesMedianRevenue = linearPercentile(allComparablesRevenues, 0.5);
 
-  // Common property types
+  // Full dataset unlicensed computation
+  const totalDatasetUnlicensedCount = allListings.filter((l) => !l.has_license).length;
+  const totalDatasetUnlicensed31PlusCount = allListings.filter(
+    (l) => !l.has_license && l.minimum_nights !== null && l.minimum_nights >= 31
+  ).length;
+
+  // Property types in this comparable slice
   const typeCounts: Record<string, number> = {};
   comparables.forEach((c) => {
     typeCounts[c.property_type] = (typeCounts[c.property_type] || 0) + 1;
@@ -333,6 +349,10 @@ export function computeComparableStats(
     unlicensedCount: unlicensedListings.length,
     unlicensedMedianPrice: linearPercentile(unlicensedPrices, 0.5),
     unlicensedMedianRevenue: linearPercentile(unlicensedRevenues, 0.5),
+    comparablesMedianRevenue,
+    totalDatasetUnlicensedCount,
+    totalDatasetUnlicensed31PlusCount,
+    propertyTypeCounts: typeCounts,
     commonPropertyTypes,
   };
 
