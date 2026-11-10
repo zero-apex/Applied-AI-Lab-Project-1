@@ -68,10 +68,11 @@ COMPUTED STATISTICS:
 
 OUTPUT REQUIREMENTS:
 Return valid JSON with exactly three keys: "budget", "market", and "premium".
-Each key must have a concise 2-3 sentence strategic advisory explanation:
-- "budget": Explains the $${Number(p25).toFixed(2)} rate (25th percentile). Ideal for new listings needing instant traction, fast 5-star reviews, or higher off-peak occupancy.
-- "market": Explains the $${Number(median).toFixed(2)} rate (median). The baseline recommendation balancing booking pace and revenue among the ${count} comps.
-- "premium": Explains the $${Number(p75).toFixed(2)} rate (75th percentile). For high-spec properties with designer furnishings, dedicated outdoor space, or premium amenities.
+Each key must have a concise 2-sentence statistical explanation:
+- "budget": Explains the $${Number(p25).toFixed(2)} rate (25th percentile). Note that 25% of the ${count} comparable listings in ${neighbourhood} charge this amount or less.
+- "market": Explains the $${Number(median).toFixed(2)} rate (median). Note that this represents the median of the ${count} comparable listings in ${neighbourhood}.
+- "premium": Explains the $${Number(p75).toFixed(2)} rate (75th percentile). Note that 25% of the ${count} comparable listings in ${neighbourhood} charge this amount or more.
+Do not make any claims about guest demand, momentum, occupancy, listing quality, or events. Ground the explanation strictly in the computed numbers and percentiles.
 
 Only return raw JSON without markdown code fences or backticks.`;
 
@@ -89,9 +90,9 @@ Only return raw JSON without markdown code fences or backticks.`;
       parsed = JSON.parse(text);
     } catch {
       parsed = {
-        budget: `Budget pricing ($${Number(p25).toFixed(2)}) is positioned at the 25th percentile of ${count} local comparables.`,
-        market: `Market pricing ($${Number(median).toFixed(2)}) reflects the median asking rate across ${count} comparables.`,
-        premium: `Premium pricing ($${Number(p75).toFixed(2)}) represents the 75th percentile for premier units.`,
+        budget: `25% of the ${count} comparable listings in ${neighbourhood} charge $${Number(p25).toFixed(2)} or less (25th percentile).`,
+        market: `Median price of the ${count} comparable listings in ${neighbourhood} is $${Number(median).toFixed(2)}.`,
+        premium: `25% of the ${count} comparable listings in ${neighbourhood} charge $${Number(p75).toFixed(2)} or more (75th percentile).`,
       };
     }
 
@@ -100,9 +101,9 @@ Only return raw JSON without markdown code fences or backticks.`;
     console.error('Error generating strategy explanation, using statistical fallback:', error);
     const { p25, median, p75, count, neighbourhood } = req.body;
     return res.json({
-      budget: `Budget pricing ($${Number(p25 || 0).toFixed(2)}/night, 25th percentile) optimizes for high booking velocity and fast-tracks review accumulation for new listings in ${neighbourhood || 'the neighbourhood'}.`,
-      market: `Market pricing ($${Number(median || 0).toFixed(2)}/night, median) achieves balanced booking pace and revenue across the ${count || 0} active comparables.`,
-      premium: `Premium pricing ($${Number(p75 || 0).toFixed(2)}/night, 75th percentile) captures peak guest demand for properties offering superior finishes, prime views, or dedicated amenities.`,
+      budget: `25% of the ${count || 0} comparable listings in ${neighbourhood || 'the neighbourhood'} charge $${Number(p25 || 0).toFixed(2)} or less (25th percentile).`,
+      market: `Median price of the ${count || 0} comparable listings in ${neighbourhood || 'the neighbourhood'} is $${Number(median || 0).toFixed(2)}.`,
+      premium: `25% of the ${count || 0} comparable listings in ${neighbourhood || 'the neighbourhood'} charge $${Number(p75 || 0).toFixed(2)} or more (75th percentile).`,
     });
   }
 });

@@ -15,9 +15,9 @@ export const PricingStrategySelector: React.FC<PricingStrategySelectorProps> = (
     market: string;
     premium: string;
   }>({
-    budget: `Budget pricing ($${stats.p25.toFixed(2)}/night, 25th percentile) maximizes occupancy and fast-tracks review accumulation for new listings in ${stats.neighbourhood}.`,
-    market: `Market pricing ($${stats.median.toFixed(2)}/night, median) achieves optimal equilibrium between booking pace and revenue across ${stats.count} local comparables.`,
-    premium: `Premium pricing ($${stats.p75.toFixed(2)}/night, 75th percentile) targets high-yield bookings for properties offering superior furnishings, prime micro-location, or elite amenities.`,
+    budget: `Budget pricing ($${stats.p25.toFixed(2)}/night, 25th percentile): 25% of the ${stats.count} comparable listings in ${stats.neighbourhood} charge $${stats.p25.toFixed(2)} or less.`,
+    market: `Market pricing ($${stats.median.toFixed(2)}/night, median): the statistical midpoint of the ${stats.count} comparable listings in ${stats.neighbourhood}.`,
+    premium: `Premium pricing ($${stats.p75.toFixed(2)}/night, 75th percentile): 25% of the ${stats.count} comparable listings in ${stats.neighbourhood} charge $${stats.p75.toFixed(2)} or more.`,
   });
   const [loading, setLoading] = useState(false);
 
@@ -79,6 +79,7 @@ export const PricingStrategySelector: React.FC<PricingStrategySelectorProps> = (
     price: number;
     percentileLabel: string;
     badge: string;
+    description: string;
     icon: React.ReactNode;
   }[] = [
     {
@@ -86,7 +87,8 @@ export const PricingStrategySelector: React.FC<PricingStrategySelectorProps> = (
       name: 'Budget Strategy',
       price: stats.p25,
       percentileLabel: '25th Percentile',
-      badge: 'High Occupancy',
+      badge: '25th Percentile',
+      description: `25% of the ${stats.count} comparable listings charge $${stats.p25.toFixed(2)} or less.`,
       icon: <DollarSign className="w-4 h-4 text-blue-600" />,
     },
     {
@@ -94,7 +96,8 @@ export const PricingStrategySelector: React.FC<PricingStrategySelectorProps> = (
       name: 'Market Strategy (Recommended)',
       price: stats.median,
       percentileLabel: '50th Percentile (Median)',
-      badge: 'Balanced Yield',
+      badge: 'Market Median',
+      description: `Median of the ${stats.count} comparable listings.`,
       icon: <Award className="w-4 h-4 text-amber-600" />,
     },
     {
@@ -102,7 +105,8 @@ export const PricingStrategySelector: React.FC<PricingStrategySelectorProps> = (
       name: 'Premium Strategy',
       price: stats.p75,
       percentileLabel: '75th Percentile',
-      badge: 'Max Revenue / Night',
+      badge: '75th Percentile',
+      description: `25% of the ${stats.count} comparable listings charge $${stats.p75.toFixed(2)} or more.`,
       icon: <ArrowUpRight className="w-4 h-4 text-purple-600" />,
     },
   ];
@@ -169,13 +173,11 @@ export const PricingStrategySelector: React.FC<PricingStrategySelectorProps> = (
               </div>
 
               <div
-                className={`text-2xs pt-2 border-t mt-3 leading-relaxed ${
-                  isSelected ? 'border-stone-800 text-stone-300' : 'border-stone-200 text-stone-600'
+                className={`text-2xs pt-2 border-t mt-3 leading-relaxed font-medium ${
+                  isSelected ? 'border-stone-800 text-stone-300' : 'border-stone-200 text-stone-700'
                 }`}
               >
-                {strat.key === 'budget' && 'Captures immediate guest demand and speeds initial listing momentum.'}
-                {strat.key === 'market' && 'Advisory baseline matching median pricing across all active comps.'}
-                {strat.key === 'premium' && 'For pristine spaces targeting top-quartile guests and peak events.'}
+                {strat.description}
               </div>
             </div>
           );
