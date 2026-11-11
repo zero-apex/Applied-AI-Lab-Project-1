@@ -472,3 +472,105 @@ export function computeAllNeighbourhood1BedComparables(
   // Sort descending by median price
   return results.sort((a, b) => b.medianPrice - a.medianPrice);
 }
+
+export interface GroupStats {
+  count: number;
+  medianPrice: number;
+  p25Price: number;
+  p75Price: number;
+  medianOccupancy: number;
+  isLowData: boolean;
+}
+
+export interface ShortVsMidTermStats {
+  shortStay: GroupStats;
+  midTerm: GroupStats;
+  breakevenOccupancyPercent: number;
+  breakevenNights: number;
+  totalDataset31PlusCount: number;
+  totalDataset31PlusNoLicensePercent: number;
+}
+
+/**
+ * Compute short-stay (<=30 nights) vs mid-term (>=31 nights) comparison stats
+ * for the selected neighbourhood and bedroom count (room_type = 'Entire home/apt').
+ * Blank minimum_nights are excluded from both groups.
+ */
+export function computeShortVsMidTermStats(
+  allListings: Listing[],
+  neighbourhood: string,
+  bedrooms: number
+): ShortVsMidTermStats {
+  const validAreaListings = allListings.filter(
+    (l) =>
+      l.neighbourhood_cleansed === neighbourhood &&
+      l.bedrooms === bedrooms &&
+      l.room_type === 'Entire home/apt' &&
+      l.minimum_nights !== null
+  );
+
+  const shortStayListings = validAreaListings.filter((l) => (l.minimum_nights as number) <= 30);
+  const midTermListings = validAreaListings.filter((l) => (l.minimum_nights as number) >= 31);
+
+  // Short stay stats
+  const shortPrices = shortStayListings.map((l) => l.price).sort((a, b) => a - b);
+  const shortOccupancies = shortStayListings
+    .map((l) => l.estimated_occupancy_l365d)
+    .sort((a, b) => a - b);
+  const shortMedianPrice = linearPercentile(shortPrices, 0.5);
+  const shortP25Price = linearPercentile(shortPrices, 0.25);
+  const shortP75Price = linearPercentile(shortPrices, 0.75);
+  const shortMedianOccupancy = linearPercentile(shortOccupancies, 0.5);
+
+  // Mid term stats
+  const midPrices = midTermListings.map((l) => l.price).sort((a, b) => a - b);
+  const midOccupancies = midTermListings
+    .map((l) => l.estimated_occupancy_l365d)
+    .sort((a, b) => a - b);
+  const midMedianPrice = linearPercentile(midPrices, 0.5);
+  const midP25Price = linearPercentile(midPrices, 0.25);
+  const midP75Price = linearPercentile(midPrices, 0.75);
+  const midMedianOccupancy = linearPercentile(midOccupancies, 0.5);
+
+  // Break-even occupancy = mid-term median price divided by short-stay median price
+  let breakevenOccupancyPercent = 0;
+  let breakevenNights = 0;
+  if (shortMedianPrice > 0 && midMedianPrice > 0) {
+    breakevenOccupancyPercent = (midMedianPrice / shortMedianPrice) * 100;
+    breakevenNights = (midMedianPrice / shortMedianPrice) * 365;
+  }
+
+  // Full dataset 31+ stats (all rows in CSV)
+  const all31Plus = allListings.filter(
+    (l) => l.minimum_nights !== null && l.minimum_nights >= 31
+  );
+  const totalDataset31PlusCount = all31Plus.length;
+  const noLicense31PlusCount = all31Plus.filter((l) => !l.has_license).length;
+  const totalDataset31PlusNoLicensePercent =
+    totalDataset31PlusCount > 0
+      ? (noLicense31PlusCount / totalDataset31PlusCount) * 100
+      : 0;
+
+  return {
+    shortStay: {
+      count: shortStayListings.length,
+      medianPrice: shortMedianPrice,
+      p25Price: shortP25Price,
+      p75Price: shortP75Price,
+      medianOccupancy: shortMedianOccupancy,
+      isLowData: shortStayListings.length < 20,
+    },
+    midTerm: {
+      count: midTermListings.length,
+      medianPrice: midMedianPrice,
+      p25Price: midP25Price,
+      p75Price: midP75Price,
+      medianOccupancy: midMedianOccupancy,
+      isLowData: midTermListings.length < 20,
+    },
+    breakevenOccupancyPercent,
+    breakevenNights,
+    totalDataset31PlusCount,
+    totalDataset31PlusNoLicensePercent,
+  };
+}

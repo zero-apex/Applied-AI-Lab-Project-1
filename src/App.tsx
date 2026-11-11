@@ -12,7 +12,7 @@ import { RecommendationCard } from './components/RecommendationCard';
 import { PricingStrategySelector } from './components/PricingStrategySelector';
 import { PriceHistogramChart } from './components/PriceHistogramChart';
 import { NeighbourhoodBarChart } from './components/NeighbourhoodBarChart';
-import { LicensedVsUnlicensedCard } from './components/LicensedVsUnlicensedCard';
+import { ShortVsMidTermRentalPanel } from './components/ShortVsMidTermRentalPanel';
 import { WhereDidThisNumberComeFrom } from './components/WhereDidThisNumberComeFrom';
 import { AskTheDataBox } from './components/AskTheDataBox';
 import { DataNoteFooter } from './components/DataNoteFooter';
@@ -192,8 +192,12 @@ export default function App() {
         {/* 3. Price Distribution Histogram */}
         <PriceHistogramChart comparables={comparables} stats={stats} />
 
-        {/* 8. Licensed vs Unlicensed Comparison Card */}
-        <LicensedVsUnlicensedCard stats={stats} />
+        {/* 8. Short-term vs. Mid-term Rental Panel */}
+        <ShortVsMidTermRentalPanel
+          allListings={allListings}
+          selectedNeighbourhood={selectedNeighbourhood}
+          bedrooms={bedrooms}
+        />
 
         {/* 4. Neighbourhood Comparison Bar Chart */}
         <NeighbourhoodBarChart
