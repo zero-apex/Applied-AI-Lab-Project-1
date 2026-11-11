@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Listing, computeShortVsMidTermStats } from '../services/dataService';
 import { CalendarRange, AlertTriangle, Info, ArrowRightLeft, DollarSign } from 'lucide-react';
 
@@ -33,10 +33,36 @@ export const ShortVsMidTermRentalPanel: React.FC<ShortVsMidTermRentalPanelProps>
   const hasMidTerm = midTerm.count > 0;
   const eitherLowData = shortStay.isLowData || (hasMidTerm && midTerm.isLowData);
 
-  // Small bar chart dimensions
-  const chartHeight = 180;
-  const chartWidth = 360;
+  // Measure chart container width so SVG text uses fixed pixel sizes without scaling
+  const chartContainerRef = useRef<HTMLDivElement>(null);
+  const [chartContainerWidth, setChartContainerWidth] = useState<number>(360);
+
+  useEffect(() => {
+    if (!chartContainerRef.current) return;
+    const updateWidth = () => {
+      if (chartContainerRef.current) {
+        const w = chartContainerRef.current.clientWidth;
+        if (w > 0) setChartContainerWidth(w);
+      }
+    };
+    updateWidth();
+    const ro = new ResizeObserver(updateWidth);
+    ro.observe(chartContainerRef.current);
+    return () => ro.disconnect();
+  }, []);
+
+  // Small bar chart dimensions: at least 260px tall
+  const chartSvgHeight = 270;
+  const plotLeft = 75;
+  const baselineY = 195;
+  const plotTop = 35;
+  const maxBarH = 135;
   const maxPrice = Math.max(shortStay.medianPrice, midTerm.medianPrice, 100) * 1.25;
+
+  const availablePlotW = Math.max(180, chartContainerWidth - plotLeft - 25);
+  const barW = Math.min(75, Math.max(50, availablePlotW * 0.28));
+  const shortBarCenterX = plotLeft + availablePlotW * 0.32;
+  const midBarCenterX = plotLeft + availablePlotW * 0.72;
 
   return (
     <div className="bg-white rounded-xl border border-stone-200 shadow-xs p-5 sm:p-6 mb-6">
@@ -191,35 +217,38 @@ export const ShortVsMidTermRentalPanel: React.FC<ShortVsMidTermRentalPanelProps>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6 items-start">
         {/* Small bar chart of the two median nightly prices */}
         <div className="lg:col-span-5 bg-stone-50/80 p-4 rounded-xl border border-stone-200">
-          <h4 className="text-xs font-bold text-stone-900 mb-3 uppercase tracking-wider">
+          <h4 className="text-sm font-bold text-stone-900 mb-3 uppercase tracking-wider font-sans">
             Median Nightly Price Comparison
           </h4>
 
-          <div className="relative w-full">
+          <div ref={chartContainerRef} className="relative w-full overflow-hidden select-none">
             <svg
-              viewBox={`0 0 ${chartWidth} ${chartHeight}`}
-              className="w-full h-auto select-none"
+              width={chartContainerWidth}
+              height={chartSvgHeight}
+              className="overflow-visible font-sans"
             >
               {/* Y-axis gridlines & labels */}
               {[0, 0.5, 1].map((ratio) => {
                 const priceVal = Math.round(maxPrice * ratio);
-                const y = 140 - ratio * 110;
+                const y = baselineY - ratio * maxBarH;
                 return (
                   <g key={ratio}>
                     <line
-                      x1={45}
+                      x1={plotLeft}
                       y1={y}
-                      x2={chartWidth - 15}
+                      x2={chartContainerWidth - 20}
                       y2={y}
                       stroke="#e7e5e4"
                       strokeDasharray={ratio === 0 ? undefined : '3 3'}
                       strokeWidth="1"
                     />
                     <text
-                      x={40}
-                      y={y + 3}
+                      x={plotLeft - 10}
+                      y={y + 4}
                       textAnchor="end"
-                      className="text-3xs fill-stone-400 font-mono"
+                      fill="#78716c"
+                      fontSize="12px"
+                      fontFamily="ui-sans-serif, system-ui, sans-serif"
                     >
                       ${priceVal}
                     </text>
@@ -227,23 +256,35 @@ export const ShortVsMidTermRentalPanel: React.FC<ShortVsMidTermRentalPanelProps>
                 );
               })}
 
-              {/* Y-axis title */}
+              {/* Y-axis title: sits fully to the left of tick labels with >=12px clearance */}
               <text
-                x={-75}
-                y={12}
+                x={-(plotTop + maxBarH / 2)}
+                y={18}
                 transform="rotate(-90)"
                 textAnchor="middle"
-                className="text-3xs fill-stone-500 font-medium"
+                fill="#57534e"
+                fontSize="12px"
+                fontWeight="500"
+                fontFamily="ui-sans-serif, system-ui, sans-serif"
               >
                 $ per night
               </text>
 
+              {/* Baseline axis line */}
+              <line
+                x1={plotLeft}
+                y1={baselineY}
+                x2={chartContainerWidth - 20}
+                y2={baselineY}
+                stroke="#a8a29e"
+                strokeWidth="1.25"
+              />
+
               {/* Bar 1: Short-stay */}
               {(() => {
-                const barH = (shortStay.medianPrice / maxPrice) * 110;
-                const barX = 85;
-                const barY = 140 - barH;
-                const barW = 65;
+                const barH = (shortStay.medianPrice / maxPrice) * maxBarH;
+                const barX = shortBarCenterX - barW / 2;
+                const barY = baselineY - barH;
                 return (
                   <g>
                     <rect
@@ -254,27 +295,38 @@ export const ShortVsMidTermRentalPanel: React.FC<ShortVsMidTermRentalPanelProps>
                       fill="#1c1917"
                       rx="3"
                     />
+                    {/* Dollar value above bar with >= 6px space */}
                     <text
-                      x={barX + barW / 2}
-                      y={barY - 6}
+                      x={shortBarCenterX}
+                      y={barY - 8}
                       textAnchor="middle"
-                      className="text-xs fill-stone-900 font-mono font-bold"
+                      fill="#1c1917"
+                      fontSize="13px"
+                      fontWeight="bold"
+                      fontFamily="ui-monospace, monospace"
                     >
                       ${shortStay.medianPrice.toFixed(2)}
                     </text>
+                    {/* Category label: line 1, with >= 8px space below axis line */}
                     <text
-                      x={barX + barW / 2}
-                      y={154}
+                      x={shortBarCenterX}
+                      y={baselineY + 20}
                       textAnchor="middle"
-                      className="text-3xs fill-stone-700 font-semibold"
+                      fill="#1c1917"
+                      fontSize="13px"
+                      fontWeight="600"
+                      fontFamily="ui-sans-serif, system-ui, sans-serif"
                     >
                       Short-stay
                     </text>
+                    {/* N label: line 2, with >= 8px space below category label */}
                     <text
-                      x={barX + barW / 2}
-                      y={166}
+                      x={shortBarCenterX}
+                      y={baselineY + 40}
                       textAnchor="middle"
-                      className="text-3xs fill-stone-500 font-mono"
+                      fill="#78716c"
+                      fontSize="12px"
+                      fontFamily="ui-sans-serif, system-ui, sans-serif"
                     >
                       N = {shortStay.count}
                     </text>
@@ -284,10 +336,9 @@ export const ShortVsMidTermRentalPanel: React.FC<ShortVsMidTermRentalPanelProps>
 
               {/* Bar 2: Mid-term */}
               {(() => {
-                const barH = hasMidTerm ? (midTerm.medianPrice / maxPrice) * 110 : 0;
-                const barX = 210;
-                const barY = 140 - barH;
-                const barW = 65;
+                const barH = hasMidTerm ? (midTerm.medianPrice / maxPrice) * maxBarH : 0;
+                const barX = midBarCenterX - barW / 2;
+                const barY = baselineY - barH;
                 return (
                   <g>
                     <rect
@@ -298,27 +349,38 @@ export const ShortVsMidTermRentalPanel: React.FC<ShortVsMidTermRentalPanelProps>
                       fill="#78716c"
                       rx="3"
                     />
+                    {/* Dollar value above bar with >= 6px space */}
                     <text
-                      x={barX + barW / 2}
-                      y={barY - 6}
+                      x={midBarCenterX}
+                      y={barY - 8}
                       textAnchor="middle"
-                      className="text-xs fill-stone-900 font-mono font-bold"
+                      fill="#1c1917"
+                      fontSize="13px"
+                      fontWeight="bold"
+                      fontFamily="ui-monospace, monospace"
                     >
                       {hasMidTerm ? `$${midTerm.medianPrice.toFixed(2)}` : 'N/A'}
                     </text>
+                    {/* Category label: line 1, with >= 8px space below axis line */}
                     <text
-                      x={barX + barW / 2}
-                      y={154}
+                      x={midBarCenterX}
+                      y={baselineY + 20}
                       textAnchor="middle"
-                      className="text-3xs fill-stone-700 font-semibold"
+                      fill="#1c1917"
+                      fontSize="13px"
+                      fontWeight="600"
+                      fontFamily="ui-sans-serif, system-ui, sans-serif"
                     >
                       Mid-term
                     </text>
+                    {/* N label: line 2, with >= 8px space below category label */}
                     <text
-                      x={barX + barW / 2}
-                      y={166}
+                      x={midBarCenterX}
+                      y={baselineY + 40}
                       textAnchor="middle"
-                      className="text-3xs fill-stone-500 font-mono"
+                      fill="#78716c"
+                      fontSize="12px"
+                      fontFamily="ui-sans-serif, system-ui, sans-serif"
                     >
                       N = {midTerm.count}
                     </text>
