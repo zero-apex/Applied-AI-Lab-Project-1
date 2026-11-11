@@ -128,16 +128,16 @@ export const WhereDidThisNumberComeFrom: React.FC<WhereDidThisNumberComeFromProp
   };
 
   return (
-    <div className="bg-white rounded-xl border border-stone-200 shadow-xs p-6 mb-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+    <div className="bg-white/[0.04] rounded-2xl border border-white/10 shadow-xl shadow-black/40 p-6 backdrop-blur-md">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
         <div>
           <div className="flex items-center gap-2">
-            <FileText className="w-5 h-5 text-stone-800" />
-            <h3 className="font-serif font-bold text-lg text-stone-900">
+            <FileText className="w-5 h-5 text-violet-400" />
+            <h3 className="text-lg font-semibold text-zinc-100 tracking-tight">
               Where Did This Number Come From?
             </h3>
           </div>
-          <p className="text-xs text-stone-500 mt-0.5">
+          <p className="text-xs text-zinc-400 mt-1">
             Full audit trail of active filter rules, excluded listings, and the verifiable comparable data table.
           </p>
         </div>
@@ -146,87 +146,87 @@ export const WhereDidThisNumberComeFrom: React.FC<WhereDidThisNumberComeFromProp
           <button
             type="button"
             onClick={handleExportCSV}
-            className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-stone-200 bg-stone-50 hover:bg-stone-100 text-stone-700 flex items-center gap-1.5 transition-colors"
+            className="text-xs font-semibold px-3.5 py-2 rounded-xl border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] text-zinc-200 hover:text-white flex items-center gap-1.5 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500"
           >
-            <Download className="w-3.5 h-3.5 text-stone-500" />
+            <Download className="w-3.5 h-3.5 text-violet-400" />
             Export Comps CSV ({stats.count})
           </button>
         </div>
       </div>
 
       {/* Filter Breakdown & Exclusion Metrics */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-        <div className="bg-stone-50 p-3.5 rounded-xl border border-stone-200">
-          <span className="text-2xs font-semibold uppercase tracking-wider text-stone-500 block mb-1">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 mb-6">
+        <div className="bg-white/[0.03] p-4 rounded-xl border border-white/5">
+          <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400 block mb-1">
             Total In Area &amp; BR
           </span>
-          <div className="text-2xl font-serif font-bold text-stone-900">
+          <div className="text-2xl font-bold text-zinc-100 tabular-numbers">
             {stats.totalAreaEntireHomes}
           </div>
-          <span className="text-3xs text-stone-500">
+          <span className="text-3xs text-zinc-400">
             Entire home/apt in {stats.neighbourhood}
           </span>
         </div>
 
-        <div className="bg-amber-50/70 p-3.5 rounded-xl border border-amber-200">
-          <span className="text-2xs font-semibold uppercase tracking-wider text-amber-900 block mb-1">
+        <div className="bg-amber-500/10 p-4 rounded-xl border border-amber-400/20">
+          <span className="text-xs font-semibold uppercase tracking-wider text-amber-300 block mb-1">
             Excluded (31+ Nights)
           </span>
-          <div className="text-2xl font-serif font-bold text-amber-800">
+          <div className="text-2xl font-bold text-amber-200 tabular-numbers">
             {stats.excluded31PlusCount}
           </div>
-          <span className="text-3xs text-amber-700">
+          <span className="text-3xs text-amber-300/80">
             Minimum stay exceeds cap of {stats.minNightsCap}d
           </span>
         </div>
 
-        <div className="bg-stone-50 p-3.5 rounded-xl border border-stone-200">
-          <span className="text-2xs font-semibold uppercase tracking-wider text-stone-500 block mb-1">
+        <div className="bg-white/[0.03] p-4 rounded-xl border border-white/5">
+          <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400 block mb-1">
             Excluded (Blank Min Nights)
           </span>
-          <div className="text-2xl font-serif font-bold text-stone-700">
+          <div className="text-2xl font-bold text-zinc-300 tabular-numbers">
             {stats.blankMinNightsCount}
           </div>
-          <span className="text-3xs text-stone-500">
+          <span className="text-3xs text-zinc-400">
             Treated as not meeting rule
           </span>
         </div>
 
-        <div className="bg-stone-900 text-white p-3.5 rounded-xl border border-stone-900 shadow-2xs">
-          <span className="text-2xs font-semibold uppercase tracking-wider text-amber-400 block mb-1">
+        <div className="bg-gradient-to-br from-violet-900/40 via-violet-950/60 to-indigo-950/50 text-white p-4 rounded-xl border border-violet-500/50 shadow-lg shadow-violet-950/30">
+          <span className="text-xs font-semibold uppercase tracking-wider text-violet-300 block mb-1">
             Qualified Comps (N)
           </span>
-          <div className="text-2xl font-serif font-bold text-white">
+          <div className="text-2xl font-bold text-white tabular-numbers">
             {stats.count}
           </div>
-          <span className="text-3xs text-stone-400">
+          <span className="text-3xs text-zinc-300">
             {stats.totalAreaEntireHomes} - {stats.totalExcludedByMinNights} = {stats.count}
           </span>
         </div>
       </div>
 
       {/* Audit Checklist */}
-      <div className="bg-stone-50/60 rounded-xl p-4 border border-stone-200 mb-6 text-xs text-stone-700">
-        <h4 className="font-bold text-stone-900 mb-2.5 flex items-center gap-1.5">
-          <Filter className="w-3.5 h-3.5 text-stone-600" />
+      <div className="bg-black/30 rounded-xl p-4.5 border border-white/10 mb-6 text-xs text-zinc-300 backdrop-blur-md">
+        <h4 className="font-semibold text-zinc-100 mb-3 flex items-center gap-1.5">
+          <Filter className="w-3.5 h-3.5 text-violet-400" />
           Filter Rule Verification
         </h4>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>
-              <strong>Neighbourhood:</strong> Exact match on{' '}
-              <code className="text-2xs bg-white px-1.5 py-0.5 rounded border border-stone-200">
+              <strong className="text-zinc-100">Neighbourhood:</strong> Exact match on{' '}
+              <code className="text-2xs bg-white/[0.06] text-violet-300 px-1.5 py-0.5 rounded-md border border-white/10 font-mono">
                 {stats.neighbourhood}
               </code>
             </span>
           </div>
 
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>
-              <strong>Bedrooms:</strong> Exactly{' '}
-              <code className="text-2xs bg-white px-1.5 py-0.5 rounded border border-stone-200">
+              <strong className="text-zinc-100">Bedrooms:</strong> Exactly{' '}
+              <code className="text-2xs bg-white/[0.06] text-violet-300 px-1.5 py-0.5 rounded-md border border-white/10 font-mono">
                 {stats.bedrooms}
               </code>{' '}
               bedroom{stats.bedrooms === 1 ? '' : 's'}
@@ -234,10 +234,10 @@ export const WhereDidThisNumberComeFrom: React.FC<WhereDidThisNumberComeFromProp
           </div>
 
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>
-              <strong>Room Type:</strong> Strictly{' '}
-              <code className="text-2xs bg-white px-1.5 py-0.5 rounded border border-stone-200">
+              <strong className="text-zinc-100">Room Type:</strong> Strictly{' '}
+              <code className="text-2xs bg-white/[0.06] text-violet-300 px-1.5 py-0.5 rounded-md border border-white/10 font-mono">
                 Entire home/apt
               </code>{' '}
               (no shared/private rooms)
@@ -245,10 +245,10 @@ export const WhereDidThisNumberComeFrom: React.FC<WhereDidThisNumberComeFromProp
           </div>
 
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>
-              <strong>Minimum Stay:</strong> &le;{' '}
-              <code className="text-2xs bg-white px-1.5 py-0.5 rounded border border-stone-200">
+              <strong className="text-zinc-100">Minimum Stay:</strong> &le;{' '}
+              <code className="text-2xs bg-white/[0.06] text-violet-300 px-1.5 py-0.5 rounded-md border border-white/10 font-mono">
                 {stats.minNightsCap} nights
               </code>{' '}
               (blanks excluded)
@@ -258,9 +258,9 @@ export const WhereDidThisNumberComeFrom: React.FC<WhereDidThisNumberComeFromProp
       </div>
 
       {/* Table search & pagination header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3.5">
         <div className="relative w-full sm:w-64">
-          <Search className="w-3.5 h-3.5 text-stone-400 absolute left-2.5 top-2.5" />
+          <Search className="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-2.5" />
           <input
             type="text"
             placeholder="Search comps table..."
@@ -269,11 +269,11 @@ export const WhereDidThisNumberComeFrom: React.FC<WhereDidThisNumberComeFromProp
               setSearchTerm(e.target.value);
               setCurrentPage(1);
             }}
-            className="w-full text-xs bg-stone-50 border border-stone-200 rounded-lg pl-8 pr-2.5 py-1.5 text-stone-800 focus:outline-none focus:ring-1 focus:ring-stone-600"
+            className="w-full text-xs bg-white/[0.05] border border-white/10 rounded-xl pl-9 pr-3 py-2 text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500/80 focus:border-violet-500/60 transition-all duration-150"
           />
         </div>
 
-        <div className="text-2xs text-stone-500 font-mono">
+        <div className="text-xs text-zinc-400 font-mono">
           Showing {(currentPage - 1) * pageSize + 1}–
           {Math.min(currentPage * pageSize, processedListings.length)} of {processedListings.length}{' '}
           listings
@@ -281,142 +281,142 @@ export const WhereDidThisNumberComeFrom: React.FC<WhereDidThisNumberComeFromProp
       </div>
 
       {/* Sortable Table */}
-      <div className="overflow-x-auto rounded-lg border border-stone-200">
+      <div className="overflow-x-auto rounded-xl border border-white/10 bg-white/[0.02]">
         <table className="w-full text-left text-xs border-collapse">
           <thead>
-            <tr className="bg-stone-100 text-stone-700 font-semibold border-b border-stone-200">
+            <tr className="bg-white/[0.05] text-zinc-300 font-semibold border-b border-white/10">
               <th
                 onClick={() => handleSort('id')}
-                className="py-2.5 px-3 cursor-pointer hover:bg-stone-200 transition-colors"
+                className="py-3 px-3.5 cursor-pointer hover:bg-white/[0.08] transition-colors"
               >
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1.5">
                   <span>Listing ID</span>
                   {sortField === 'id' ? (
-                    sortDirection === 'asc' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />
+                    sortDirection === 'asc' ? <ArrowUp className="w-3 h-3 text-violet-400" /> : <ArrowDown className="w-3 h-3 text-violet-400" />
                   ) : (
-                    <ArrowUpDown className="w-3 h-3 text-stone-400" />
+                    <ArrowUpDown className="w-3 h-3 text-zinc-500" />
                   )}
                 </div>
               </th>
 
               <th
                 onClick={() => handleSort('property_type')}
-                className="py-2.5 px-3 cursor-pointer hover:bg-stone-200 transition-colors"
+                className="py-3 px-3.5 cursor-pointer hover:bg-white/[0.08] transition-colors"
               >
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1.5">
                   <span>Property Type</span>
                   {sortField === 'property_type' ? (
-                    sortDirection === 'asc' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />
+                    sortDirection === 'asc' ? <ArrowUp className="w-3 h-3 text-violet-400" /> : <ArrowDown className="w-3 h-3 text-violet-400" />
                   ) : (
-                    <ArrowUpDown className="w-3 h-3 text-stone-400" />
+                    <ArrowUpDown className="w-3 h-3 text-zinc-500" />
                   )}
                 </div>
               </th>
 
               <th
                 onClick={() => handleSort('price')}
-                className="py-2.5 px-3 cursor-pointer hover:bg-stone-200 transition-colors"
+                className="py-3 px-3.5 cursor-pointer hover:bg-white/[0.08] transition-colors"
               >
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1.5">
                   <span>Price ($/nt)</span>
                   {sortField === 'price' ? (
-                    sortDirection === 'asc' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />
+                    sortDirection === 'asc' ? <ArrowUp className="w-3 h-3 text-violet-400" /> : <ArrowDown className="w-3 h-3 text-violet-400" />
                   ) : (
-                    <ArrowUpDown className="w-3 h-3 text-stone-400" />
+                    <ArrowUpDown className="w-3 h-3 text-zinc-500" />
                   )}
                 </div>
               </th>
 
               <th
                 onClick={() => handleSort('minimum_nights')}
-                className="py-2.5 px-3 cursor-pointer hover:bg-stone-200 transition-colors"
+                className="py-3 px-3.5 cursor-pointer hover:bg-white/[0.08] transition-colors"
               >
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1.5">
                   <span>Min Nights</span>
                   {sortField === 'minimum_nights' ? (
-                    sortDirection === 'asc' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />
+                    sortDirection === 'asc' ? <ArrowUp className="w-3 h-3 text-violet-400" /> : <ArrowDown className="w-3 h-3 text-violet-400" />
                   ) : (
-                    <ArrowUpDown className="w-3 h-3 text-stone-400" />
+                    <ArrowUpDown className="w-3 h-3 text-zinc-500" />
                   )}
                 </div>
               </th>
 
               <th
                 onClick={() => handleSort('number_of_reviews')}
-                className="py-2.5 px-3 cursor-pointer hover:bg-stone-200 transition-colors"
+                className="py-3 px-3.5 cursor-pointer hover:bg-white/[0.08] transition-colors"
               >
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1.5">
                   <span>Reviews</span>
                   {sortField === 'number_of_reviews' ? (
-                    sortDirection === 'asc' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />
+                    sortDirection === 'asc' ? <ArrowUp className="w-3 h-3 text-violet-400" /> : <ArrowDown className="w-3 h-3 text-violet-400" />
                   ) : (
-                    <ArrowUpDown className="w-3 h-3 text-stone-400" />
+                    <ArrowUpDown className="w-3 h-3 text-zinc-500" />
                   )}
                 </div>
               </th>
 
-              <th className="py-2.5 px-3">License</th>
+              <th className="py-3 px-3.5">License</th>
 
               <th
                 onClick={() => handleSort('review_scores_rating')}
-                className="py-2.5 px-3 cursor-pointer hover:bg-stone-200 transition-colors"
+                className="py-3 px-3.5 cursor-pointer hover:bg-white/[0.08] transition-colors"
               >
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1.5">
                   <span>Rating</span>
                   {sortField === 'review_scores_rating' ? (
-                    sortDirection === 'asc' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />
+                    sortDirection === 'asc' ? <ArrowUp className="w-3 h-3 text-violet-400" /> : <ArrowDown className="w-3 h-3 text-violet-400" />
                   ) : (
-                    <ArrowUpDown className="w-3 h-3 text-stone-400" />
+                    <ArrowUpDown className="w-3 h-3 text-zinc-500" />
                   )}
                 </div>
               </th>
             </tr>
           </thead>
 
-          <tbody className="divide-y divide-stone-100 font-sans">
+          <tbody className="divide-y divide-white/5">
             {currentListings.length === 0 ? (
               <tr>
-                <td colSpan={7} className="py-6 text-center text-stone-500 italic">
+                <td colSpan={7} className="py-8 text-center text-zinc-400 italic">
                   No matching comparables found.
                 </td>
               </tr>
             ) : (
               currentListings.map((c) => (
-                <tr key={c.id} className="hover:bg-stone-50/80 transition-colors">
-                  <td className="py-2 px-3 font-mono text-stone-700">
-                    <span className="flex items-center gap-1">
+                <tr key={c.id} className="hover:bg-white/[0.03] transition-colors">
+                  <td className="py-2.5 px-3.5 font-mono text-zinc-300">
+                    <span className="flex items-center gap-1.5">
                       {c.id}
                       <a
                         href={`https://www.airbnb.com/rooms/${c.id}`}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-stone-400 hover:text-stone-800"
+                        className="text-zinc-500 hover:text-violet-300 transition-colors"
                         title="View listing on Airbnb"
                       >
                         <ExternalLink className="w-3 h-3" />
                       </a>
                     </span>
                   </td>
-                  <td className="py-2 px-3 text-stone-800">{c.property_type}</td>
-                  <td className="py-2 px-3 font-mono font-bold text-stone-900">
+                  <td className="py-2.5 px-3.5 text-zinc-200">{c.property_type}</td>
+                  <td className="py-2.5 px-3.5 font-mono font-bold text-zinc-100 tabular-numbers">
                     ${c.price.toFixed(2)}
                   </td>
-                  <td className="py-2 px-3 font-mono text-stone-600">
+                  <td className="py-2.5 px-3.5 font-mono text-zinc-400">
                     {c.minimum_nights !== null ? `${c.minimum_nights}d` : '—'}
                   </td>
-                  <td className="py-2 px-3 font-mono text-stone-600">{c.number_of_reviews}</td>
-                  <td className="py-2 px-3">
+                  <td className="py-2.5 px-3.5 font-mono text-zinc-400 tabular-numbers">{c.number_of_reviews}</td>
+                  <td className="py-2.5 px-3.5">
                     {c.has_license ? (
-                      <span className="inline-block px-1.5 py-0.5 rounded text-3xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                      <span className="inline-block px-2 py-0.5 rounded-md text-3xs font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
                         Licensed
                       </span>
                     ) : (
-                      <span className="inline-block px-1.5 py-0.5 rounded text-3xs font-semibold bg-stone-100 text-stone-600 border border-stone-200">
+                      <span className="inline-block px-2 py-0.5 rounded-md text-3xs font-semibold bg-white/[0.06] text-zinc-400 border border-white/10">
                         Unlicensed
                       </span>
                     )}
                   </td>
-                  <td className="py-2 px-3 font-mono text-stone-700">
+                  <td className="py-2.5 px-3.5 font-mono text-zinc-300 tabular-numbers">
                     {c.review_scores_rating !== null ? `★ ${c.review_scores_rating.toFixed(2)}` : '—'}
                   </td>
                 </tr>
@@ -428,18 +428,18 @@ export const WhereDidThisNumberComeFrom: React.FC<WhereDidThisNumberComeFromProp
 
       {/* Pagination Controls */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between mt-3 text-xs">
+        <div className="flex items-center justify-between mt-4 text-xs">
           <button
             type="button"
             disabled={currentPage === 1}
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-            className="px-2.5 py-1 rounded border border-stone-200 bg-stone-50 text-stone-700 hover:bg-stone-100 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1"
+            className="px-3 py-1.5 rounded-xl border border-white/10 bg-white/[0.04] text-zinc-300 hover:bg-white/[0.08] hover:text-white disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500"
           >
             <ChevronLeft className="w-3.5 h-3.5" />
             Previous
           </button>
 
-          <span className="text-2xs text-stone-500 font-mono">
+          <span className="text-xs text-zinc-400 font-mono">
             Page {currentPage} of {totalPages}
           </span>
 
@@ -447,7 +447,7 @@ export const WhereDidThisNumberComeFrom: React.FC<WhereDidThisNumberComeFromProp
             type="button"
             disabled={currentPage === totalPages}
             onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-            className="px-2.5 py-1 rounded border border-stone-200 bg-stone-50 text-stone-700 hover:bg-stone-100 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1"
+            className="px-3 py-1.5 rounded-xl border border-white/10 bg-white/[0.04] text-zinc-300 hover:bg-white/[0.08] hover:text-white disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500"
           >
             Next
             <ChevronRight className="w-3.5 h-3.5" />

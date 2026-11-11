@@ -65,17 +65,17 @@ export const ShortVsMidTermRentalPanel: React.FC<ShortVsMidTermRentalPanelProps>
   const midBarCenterX = plotLeft + availablePlotW * 0.72;
 
   return (
-    <div className="bg-white rounded-xl border border-stone-200 shadow-xs p-5 sm:p-6 mb-6">
+    <div className="bg-white/[0.04] rounded-2xl border border-white/10 shadow-xl shadow-black/40 p-6 backdrop-blur-md">
       {/* Panel Header */}
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 mb-5">
         <div>
           <div className="flex items-center gap-2">
-            <CalendarRange className="w-5 h-5 text-stone-800" />
-            <h3 className="font-serif font-bold text-lg text-stone-900">
+            <CalendarRange className="w-5 h-5 text-violet-400" />
+            <h3 className="text-lg font-semibold text-zinc-100 tracking-tight">
               Short-term vs. Mid-term Rental
             </h3>
           </div>
-          <p className="text-xs text-stone-600 mt-1">
+          <p className="text-xs text-zinc-400 mt-1">
             Comparing entire home/apt listings in {selectedNeighbourhood} ({bedrooms === 0 ? 'Studio' : `${bedrooms} BR`}):
             Short-stay (&le; 30 nights) vs. Mid-term (&ge; 31 nights).
           </p>
@@ -84,13 +84,13 @@ export const ShortVsMidTermRentalPanel: React.FC<ShortVsMidTermRentalPanelProps>
 
       {/* Low-data warning if either group has N < 20 */}
       {eitherLowData && (
-        <div className="mb-5 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl flex items-start gap-3 shadow-2xs">
-          <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+        <div className="mb-5 bg-amber-500/10 border-l-4 border-amber-400 p-4 rounded-r-2xl border-y border-r border-amber-400/20 flex items-start gap-3 shadow-lg shadow-black/20">
+          <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
           <div>
-            <h4 className="text-sm font-bold text-amber-900">
+            <h4 className="text-sm font-semibold text-amber-200">
               Low-Data Warning (N &lt; 20)
             </h4>
-            <p className="text-xs text-amber-800 mt-0.5 leading-relaxed">
+            <p className="text-xs text-amber-300/90 mt-1 leading-relaxed">
               {shortStay.isLowData && midTerm.isLowData
                 ? `Both short-stay (N = ${shortStay.count}) and mid-term (N = ${midTerm.count}) groups have fewer than 20 listings.`
                 : shortStay.isLowData
@@ -105,49 +105,49 @@ export const ShortVsMidTermRentalPanel: React.FC<ShortVsMidTermRentalPanelProps>
       {/* Two Group Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
         {/* Short-stay group */}
-        <div className="p-5 rounded-xl border border-stone-200 bg-stone-50/70 flex flex-col justify-between">
+        <div className="p-5 rounded-xl border border-white/10 bg-white/[0.03] flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-4">
               <div>
-                <span className="font-bold text-sm text-stone-900 block leading-tight">
+                <span className="font-semibold text-sm text-zinc-100 block leading-tight">
                   Short-stay Group
                 </span>
-                <span className="text-3xs text-stone-500 font-mono">minimum_nights &le; 30</span>
+                <span className="text-3xs text-zinc-400 font-mono">minimum_nights &le; 30</span>
               </div>
-              <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-md bg-stone-200 text-stone-800 border border-stone-300">
+              <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-md bg-violet-500/20 text-violet-300 border border-violet-500/30">
                 N = {shortStay.count}
               </span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-2">
               {/* Median nightly price & 25th-75th range */}
-              <div className="bg-white p-3.5 rounded-lg border border-stone-200 shadow-2xs min-w-0">
-                <span className="text-2xs font-semibold uppercase tracking-wider text-stone-500 block mb-1">
+              <div className="bg-white/[0.03] p-3.5 rounded-xl border border-white/5 min-w-0">
+                <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400 block mb-1">
                   Median Nightly Price
                 </span>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-xl sm:text-2xl font-serif font-bold text-stone-900">
+                  <span className="text-xl sm:text-2xl font-bold text-zinc-100 tabular-numbers">
                     ${shortStay.medianPrice.toFixed(2)}
                   </span>
-                  <span className="text-3xs text-stone-400 font-medium">/ night</span>
+                  <span className="text-3xs text-zinc-400 font-medium">/ night</span>
                 </div>
-                <span className="text-3xs text-stone-500 block mt-1 font-mono">
+                <span className="text-3xs text-zinc-400 block mt-1 font-mono">
                   25th–75th: ${shortStay.p25Price.toFixed(2)} – ${shortStay.p75Price.toFixed(2)}
                 </span>
               </div>
 
               {/* Median estimated occupancy */}
-              <div className="bg-white p-3.5 rounded-lg border border-stone-200 shadow-2xs min-w-0">
-                <span className="text-2xs font-semibold uppercase tracking-wider text-stone-500 block mb-1">
+              <div className="bg-white/[0.03] p-3.5 rounded-xl border border-white/5 min-w-0">
+                <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400 block mb-1">
                   Median Estimated Occupancy
                 </span>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-xl sm:text-2xl font-serif font-bold text-stone-900">
+                  <span className="text-xl sm:text-2xl font-bold text-zinc-100 tabular-numbers">
                     {Math.round(shortStay.medianOccupancy)}
                   </span>
-                  <span className="text-3xs text-stone-400 font-medium">nights / year</span>
+                  <span className="text-3xs text-zinc-400 font-medium">nights / year</span>
                 </div>
-                <span className="text-3xs text-stone-400 block mt-1">
+                <span className="text-3xs text-zinc-400 block mt-1">
                   Inside Airbnb estimate
                 </span>
               </div>
@@ -156,16 +156,16 @@ export const ShortVsMidTermRentalPanel: React.FC<ShortVsMidTermRentalPanelProps>
         </div>
 
         {/* Mid-term group */}
-        <div className="p-5 rounded-xl border border-stone-200 bg-stone-50/70 flex flex-col justify-between">
+        <div className="p-5 rounded-xl border border-white/10 bg-white/[0.03] flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-4">
               <div>
-                <span className="font-bold text-sm text-stone-900 block leading-tight">
+                <span className="font-semibold text-sm text-zinc-100 block leading-tight">
                   Mid-term Group
                 </span>
-                <span className="text-3xs text-stone-500 font-mono">minimum_nights &ge; 31</span>
+                <span className="text-3xs text-zinc-400 font-mono">minimum_nights &ge; 31</span>
               </div>
-              <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-md bg-stone-200 text-stone-800 border border-stone-300">
+              <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-md bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
                 N = {midTerm.count}
               </span>
             </div>
@@ -173,39 +173,39 @@ export const ShortVsMidTermRentalPanel: React.FC<ShortVsMidTermRentalPanelProps>
             {hasMidTerm ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-2">
                 {/* Median nightly price & 25th-75th range */}
-                <div className="bg-white p-3.5 rounded-lg border border-stone-200 shadow-2xs min-w-0">
-                  <span className="text-2xs font-semibold uppercase tracking-wider text-stone-500 block mb-1">
+                <div className="bg-white/[0.03] p-3.5 rounded-xl border border-white/5 min-w-0">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400 block mb-1">
                     Median Nightly Price
                   </span>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-xl sm:text-2xl font-serif font-bold text-stone-900">
+                    <span className="text-xl sm:text-2xl font-bold text-zinc-100 tabular-numbers">
                       ${midTerm.medianPrice.toFixed(2)}
                     </span>
-                    <span className="text-3xs text-stone-400 font-medium">/ night</span>
+                    <span className="text-3xs text-zinc-400 font-medium">/ night</span>
                   </div>
-                  <span className="text-3xs text-stone-500 block mt-1 font-mono">
+                  <span className="text-3xs text-zinc-400 block mt-1 font-mono">
                     25th–75th: ${midTerm.p25Price.toFixed(2)} – ${midTerm.p75Price.toFixed(2)}
                   </span>
                 </div>
 
                 {/* Median estimated occupancy */}
-                <div className="bg-white p-3.5 rounded-lg border border-stone-200 shadow-2xs min-w-0">
-                  <span className="text-2xs font-semibold uppercase tracking-wider text-stone-500 block mb-1">
+                <div className="bg-white/[0.03] p-3.5 rounded-xl border border-white/5 min-w-0">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400 block mb-1">
                     Median Estimated Occupancy
                   </span>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-xl sm:text-2xl font-serif font-bold text-stone-900">
+                    <span className="text-xl sm:text-2xl font-bold text-zinc-100 tabular-numbers">
                       {Math.round(midTerm.medianOccupancy)}
                     </span>
-                    <span className="text-3xs text-stone-400 font-medium">nights / year</span>
+                    <span className="text-3xs text-zinc-400 font-medium">nights / year</span>
                   </div>
-                  <span className="text-3xs text-stone-400 block mt-1">
+                  <span className="text-3xs text-zinc-400 block mt-1">
                     Inside Airbnb estimate
                   </span>
                 </div>
               </div>
             ) : (
-              <div className="py-8 text-center text-xs text-stone-600 bg-white/70 rounded-lg border border-dashed border-stone-200 my-2 px-4">
+              <div className="py-8 text-center text-xs text-zinc-400 bg-white/[0.02] rounded-xl border border-dashed border-white/10 my-2 px-4">
                 No mid-term comparables in this neighbourhood
               </div>
             )}
@@ -216,8 +216,8 @@ export const ShortVsMidTermRentalPanel: React.FC<ShortVsMidTermRentalPanelProps>
       {/* Chart & Break-even + Slider Section */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6 items-start">
         {/* Small bar chart of the two median nightly prices */}
-        <div className="lg:col-span-5 bg-stone-50/80 p-4 rounded-xl border border-stone-200">
-          <h4 className="text-sm font-bold text-stone-900 mb-3 uppercase tracking-wider font-sans">
+        <div className="lg:col-span-5 bg-white/[0.03] p-5 rounded-xl border border-white/10">
+          <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-3">
             Median Nightly Price Comparison
           </h4>
 
@@ -238,7 +238,7 @@ export const ShortVsMidTermRentalPanel: React.FC<ShortVsMidTermRentalPanelProps>
                       y1={y}
                       x2={chartContainerWidth - 20}
                       y2={y}
-                      stroke="#e7e5e4"
+                      stroke="rgba(255, 255, 255, 0.08)"
                       strokeDasharray={ratio === 0 ? undefined : '3 3'}
                       strokeWidth="1"
                     />
@@ -246,7 +246,7 @@ export const ShortVsMidTermRentalPanel: React.FC<ShortVsMidTermRentalPanelProps>
                       x={plotLeft - 10}
                       y={y + 4}
                       textAnchor="end"
-                      fill="#78716c"
+                      fill="#d4d4d8"
                       fontSize="12px"
                       fontFamily="ui-sans-serif, system-ui, sans-serif"
                     >
@@ -262,7 +262,7 @@ export const ShortVsMidTermRentalPanel: React.FC<ShortVsMidTermRentalPanelProps>
                 y={18}
                 transform="rotate(-90)"
                 textAnchor="middle"
-                fill="#57534e"
+                fill="#a1a1aa"
                 fontSize="12px"
                 fontWeight="500"
                 fontFamily="ui-sans-serif, system-ui, sans-serif"
@@ -276,7 +276,7 @@ export const ShortVsMidTermRentalPanel: React.FC<ShortVsMidTermRentalPanelProps>
                 y1={baselineY}
                 x2={chartContainerWidth - 20}
                 y2={baselineY}
-                stroke="#a8a29e"
+                stroke="rgba(255, 255, 255, 0.2)"
                 strokeWidth="1.25"
               />
 
@@ -292,15 +292,15 @@ export const ShortVsMidTermRentalPanel: React.FC<ShortVsMidTermRentalPanelProps>
                       y={barY}
                       width={barW}
                       height={Math.max(barH, 0)}
-                      fill="#1c1917"
-                      rx="3"
+                      fill="#8b5cf6"
+                      rx="4"
                     />
                     {/* Dollar value above bar with >= 6px space */}
                     <text
                       x={shortBarCenterX}
                       y={barY - 8}
                       textAnchor="middle"
-                      fill="#1c1917"
+                      fill="#f4f4f5"
                       fontSize="13px"
                       fontWeight="bold"
                       fontFamily="ui-monospace, monospace"
@@ -312,7 +312,7 @@ export const ShortVsMidTermRentalPanel: React.FC<ShortVsMidTermRentalPanelProps>
                       x={shortBarCenterX}
                       y={baselineY + 20}
                       textAnchor="middle"
-                      fill="#1c1917"
+                      fill="#f4f4f5"
                       fontSize="13px"
                       fontWeight="600"
                       fontFamily="ui-sans-serif, system-ui, sans-serif"
@@ -324,7 +324,7 @@ export const ShortVsMidTermRentalPanel: React.FC<ShortVsMidTermRentalPanelProps>
                       x={shortBarCenterX}
                       y={baselineY + 40}
                       textAnchor="middle"
-                      fill="#78716c"
+                      fill="#a1a1aa"
                       fontSize="12px"
                       fontFamily="ui-sans-serif, system-ui, sans-serif"
                     >
@@ -346,15 +346,15 @@ export const ShortVsMidTermRentalPanel: React.FC<ShortVsMidTermRentalPanelProps>
                       y={barY}
                       width={barW}
                       height={Math.max(barH, 0)}
-                      fill="#78716c"
-                      rx="3"
+                      fill="#6366f1"
+                      rx="4"
                     />
                     {/* Dollar value above bar with >= 6px space */}
                     <text
                       x={midBarCenterX}
                       y={barY - 8}
                       textAnchor="middle"
-                      fill="#1c1917"
+                      fill="#f4f4f5"
                       fontSize="13px"
                       fontWeight="bold"
                       fontFamily="ui-monospace, monospace"
@@ -366,7 +366,7 @@ export const ShortVsMidTermRentalPanel: React.FC<ShortVsMidTermRentalPanelProps>
                       x={midBarCenterX}
                       y={baselineY + 20}
                       textAnchor="middle"
-                      fill="#1c1917"
+                      fill="#f4f4f5"
                       fontSize="13px"
                       fontWeight="600"
                       fontFamily="ui-sans-serif, system-ui, sans-serif"
@@ -378,7 +378,7 @@ export const ShortVsMidTermRentalPanel: React.FC<ShortVsMidTermRentalPanelProps>
                       x={midBarCenterX}
                       y={baselineY + 40}
                       textAnchor="middle"
-                      fill="#78716c"
+                      fill="#a1a1aa"
                       fontSize="12px"
                       fontFamily="ui-sans-serif, system-ui, sans-serif"
                     >
@@ -393,37 +393,37 @@ export const ShortVsMidTermRentalPanel: React.FC<ShortVsMidTermRentalPanelProps>
 
         {/* Break-even & Slider (hidden if midTerm.count === 0) */}
         {hasMidTerm ? (
-          <div className="lg:col-span-7 bg-stone-50/80 p-5 rounded-xl border border-stone-200">
+          <div className="lg:col-span-7 bg-black/30 p-5 rounded-xl border border-white/10 backdrop-blur-md">
             {/* Break-even Display */}
-            <div className="mb-5 pb-4 border-b border-stone-200">
-              <span className="text-2xs font-semibold uppercase tracking-wider text-stone-500 block mb-1">
+            <div className="mb-5 pb-4 border-b border-white/10">
+              <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400 block mb-1">
                 Break-Even Occupancy
               </span>
               <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-serif font-extrabold text-stone-900">
+                <span className="text-2xl font-bold text-violet-300 tabular-numbers">
                   {breakevenOccupancyPercent.toFixed(1)}%
                 </span>
-                <span className="text-sm font-serif font-bold text-stone-700">
+                <span className="text-sm font-semibold text-zinc-300 tabular-numbers">
                   ({breakevenNights.toFixed(1)} nights per year)
                 </span>
               </div>
-              <p className="text-xs text-stone-500 mt-1">
+              <p className="text-xs text-zinc-400 mt-1">
                 Assumes the mid-term unit is occupied all 365 nights.
               </p>
             </div>
 
             {/* Slider for expected short-stay occupancy */}
             <div className="mb-4">
-              <div className="flex items-center justify-between mb-1.5">
+              <div className="flex items-center justify-between mb-2">
                 <label
                   htmlFor="short-stay-occupancy-slider"
-                  className="text-xs font-semibold text-stone-800"
+                  className="text-xs font-semibold text-zinc-200"
                 >
                   Expected Short-Stay Occupancy:
                 </label>
-                <span className="text-xs font-mono font-bold text-stone-900 bg-white px-2 py-0.5 rounded border border-stone-200">
+                <span className="text-xs font-mono font-bold text-zinc-100 bg-white/[0.05] px-2.5 py-0.5 rounded-md border border-white/10 tabular-numbers">
                   {sliderOccupancy} nights{' '}
-                  <span className="text-stone-500 font-normal text-3xs">
+                  <span className="text-zinc-400 font-normal text-3xs">
                     (your assumption, not data)
                   </span>
                 </span>
@@ -437,11 +437,11 @@ export const ShortVsMidTermRentalPanel: React.FC<ShortVsMidTermRentalPanelProps>
                 step="1"
                 value={sliderOccupancy}
                 onChange={(e) => setSliderOccupancy(parseInt(e.target.value, 10) || 0)}
-                className="w-full accent-stone-900 cursor-pointer"
+                className="w-full accent-violet-500 cursor-pointer"
               />
 
               {/* Slider reference markers */}
-              <div className="relative w-full h-5 text-3xs font-mono text-stone-500 mt-1">
+              <div className="relative w-full h-5 text-3xs font-mono text-zinc-400 mt-1.5">
                 {/* 0 and 365 ends */}
                 <span className="absolute left-0">0d</span>
                 <span className="absolute right-0">365d</span>
@@ -453,8 +453,8 @@ export const ShortVsMidTermRentalPanel: React.FC<ShortVsMidTermRentalPanelProps>
                     className="absolute -translate-x-1/2 flex flex-col items-center"
                     title={`Data median occupancy: ${Math.round(shortStay.medianOccupancy)} nights`}
                   >
-                    <span className="w-0.5 h-1.5 bg-stone-400" />
-                    <span className="whitespace-nowrap text-stone-600">
+                    <span className="w-0.5 h-1.5 bg-zinc-400" />
+                    <span className="whitespace-nowrap text-zinc-300">
                       Data Median: {Math.round(shortStay.medianOccupancy)}d
                     </span>
                   </div>
@@ -467,8 +467,8 @@ export const ShortVsMidTermRentalPanel: React.FC<ShortVsMidTermRentalPanelProps>
                     className="absolute -translate-x-1/2 flex flex-col items-center top-3"
                     title={`Break-even: ${breakevenNights.toFixed(1)} nights`}
                   >
-                    <span className="w-0.5 h-1.5 bg-amber-600" />
-                    <span className="whitespace-nowrap text-amber-800 font-bold">
+                    <span className="w-0.5 h-1.5 bg-violet-400" />
+                    <span className="whitespace-nowrap text-violet-300 font-bold">
                       Break-even: {breakevenNights.toFixed(0)}d
                     </span>
                   </div>
@@ -478,40 +478,40 @@ export const ShortVsMidTermRentalPanel: React.FC<ShortVsMidTermRentalPanelProps>
 
             {/* Annual Revenue Comparison from slider */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6 pt-2">
-              <div className="bg-white p-3 rounded-lg border border-stone-200 shadow-2xs">
-                <span className="text-3xs uppercase tracking-wider text-stone-500 block mb-0.5 font-semibold">
+              <div className="bg-white/[0.03] p-3.5 rounded-xl border border-white/5">
+                <span className="text-3xs uppercase tracking-wider text-zinc-400 block mb-0.5 font-semibold">
                   Short-Stay Annual Revenue
                 </span>
-                <span className="text-xl font-serif font-bold text-stone-900 block">
+                <span className="text-xl font-bold text-zinc-100 block tabular-numbers">
                   ${Math.round(shortStayAnnualRevenue).toLocaleString()}
                 </span>
-                <span className="text-3xs text-stone-500 font-mono mt-0.5 block">
+                <span className="text-3xs text-zinc-400 font-mono mt-0.5 block">
                   ${shortStay.medianPrice.toFixed(2)} &times; {sliderOccupancy} nights
                 </span>
               </div>
 
-              <div className="bg-white p-3 rounded-lg border border-stone-200 shadow-2xs">
-                <span className="text-3xs uppercase tracking-wider text-stone-500 block mb-0.5 font-semibold">
+              <div className="bg-white/[0.03] p-3.5 rounded-xl border border-white/5">
+                <span className="text-3xs uppercase tracking-wider text-zinc-400 block mb-0.5 font-semibold">
                   Mid-Term Annual Revenue
                 </span>
-                <span className="text-xl font-serif font-bold text-stone-900 block">
+                <span className="text-xl font-bold text-zinc-100 block tabular-numbers">
                   ${Math.round(midTermAnnualRevenue).toLocaleString()}
                 </span>
-                <span className="text-3xs text-stone-500 font-mono mt-0.5 block">
+                <span className="text-3xs text-zinc-400 font-mono mt-0.5 block">
                   ${midTerm.medianPrice.toFixed(2)} &times; 365 nights
                 </span>
               </div>
             </div>
           </div>
         ) : (
-          <div className="lg:col-span-7 bg-stone-50/80 p-6 rounded-xl border border-stone-200 text-center text-xs text-stone-500 flex items-center justify-center">
+          <div className="lg:col-span-7 bg-white/[0.02] p-6 rounded-xl border border-white/10 text-center text-xs text-zinc-400 flex items-center justify-center">
             No mid-term comparables in this neighbourhood. Break-even analysis and occupancy slider are not applicable.
           </div>
         )}
       </div>
 
       {/* Data Note (computed from all rows, no legal claims) */}
-      <div className="pt-3 border-t border-stone-200 text-xs text-stone-700 leading-relaxed bg-stone-50/80 p-3 rounded-lg border border-stone-200">
+      <div className="pt-3 border-t border-white/10 text-xs text-zinc-300 leading-relaxed bg-white/[0.02] p-3.5 rounded-xl border border-white/5">
         In this dataset, {stats.totalDataset31PlusCount} listings require 31 or more nights and {stats.totalDataset31PlusNoLicensePercent.toFixed(1)}% of them have has_license = False.
       </div>
     </div>

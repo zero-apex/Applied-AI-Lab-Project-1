@@ -69,39 +69,39 @@ export const PriceHistogramChart: React.FC<PriceHistogramChartProps> = ({ compar
   const labelStep = bins.length > 8 ? Math.ceil(bins.length / 7) : 1;
 
   return (
-    <div className="bg-white rounded-xl border border-stone-200 shadow-xs p-5 sm:p-6 mb-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+    <div className="bg-white/[0.04] rounded-2xl border border-white/10 shadow-xl shadow-black/40 p-6 backdrop-blur-md">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
         <div>
           <div className="flex items-center gap-2">
-            <BarChart3 className="w-5 h-5 text-stone-800" />
-            <h3 className="font-serif font-bold text-lg text-stone-900">
+            <BarChart3 className="w-5 h-5 text-violet-400" />
+            <h3 className="text-lg font-semibold text-zinc-100 tracking-tight">
               Price Distribution of Comparables
             </h3>
           </div>
-          <p className="text-xs text-stone-500 mt-0.5 font-sans">
+          <p className="text-xs text-zinc-400 mt-1">
             Histogram of {stats.count} comparable listings. X-axis is capped at the 99th percentile (${stats.p99.toFixed(2)}) to prevent outlier compression.
           </p>
         </div>
 
         {/* Legend with distinct line styles */}
-        <div className="flex items-center gap-3 text-xs bg-stone-50 px-3 py-1.5 rounded-lg border border-stone-200 flex-wrap font-sans">
+        <div className="flex items-center gap-3 text-xs bg-white/[0.03] px-3.5 py-1.5 rounded-xl border border-white/10 flex-wrap">
           <div className="flex items-center gap-1.5">
             <svg width="20" height="4" className="overflow-visible">
-              <line x1="0" y1="2" x2="20" y2="2" stroke="#2563eb" strokeWidth="2" strokeDasharray="5 3" />
+              <line x1="0" y1="2" x2="20" y2="2" stroke="#38bdf8" strokeWidth="2" strokeDasharray="5 3" />
             </svg>
-            <span className="text-stone-700 font-medium">25th (${stats.p25.toFixed(2)})</span>
+            <span className="text-zinc-300 font-medium">25th (${stats.p25.toFixed(2)})</span>
           </div>
           <div className="flex items-center gap-1.5">
             <svg width="20" height="4" className="overflow-visible">
-              <line x1="0" y1="2" x2="20" y2="2" stroke="#ea580c" strokeWidth="2.5" />
+              <line x1="0" y1="2" x2="20" y2="2" stroke="#fb923c" strokeWidth="2.5" />
             </svg>
-            <span className="text-stone-900 font-bold">Median (${stats.median.toFixed(2)})</span>
+            <span className="text-zinc-100 font-bold">Median (${stats.median.toFixed(2)})</span>
           </div>
           <div className="flex items-center gap-1.5">
             <svg width="20" height="4" className="overflow-visible">
-              <line x1="0" y1="2" x2="20" y2="2" stroke="#9333ea" strokeWidth="2" strokeDasharray="3 3" />
+              <line x1="0" y1="2" x2="20" y2="2" stroke="#c084fc" strokeWidth="2" strokeDasharray="3 3" />
             </svg>
-            <span className="text-stone-700 font-medium">75th (${stats.p75.toFixed(2)})</span>
+            <span className="text-zinc-300 font-medium">75th (${stats.p75.toFixed(2)})</span>
           </div>
         </div>
       </div>
@@ -124,7 +124,7 @@ export const PriceHistogramChart: React.FC<PriceHistogramChartProps> = ({ compar
                   y1={y}
                   x2={padding.left + plotWidth}
                   y2={y}
-                  stroke="#e7e5e4"
+                  stroke="rgba(255, 255, 255, 0.08)"
                   strokeDasharray={ratio === 0 ? undefined : '3 3'}
                   strokeWidth="1"
                 />
@@ -132,7 +132,7 @@ export const PriceHistogramChart: React.FC<PriceHistogramChartProps> = ({ compar
                   x={padding.left - 10}
                   y={y + 4}
                   textAnchor="end"
-                  fill="#78716c"
+                  fill="#d4d4d8"
                   fontSize="12px"
                   fontFamily="ui-sans-serif, system-ui, sans-serif"
                 >
@@ -148,7 +148,7 @@ export const PriceHistogramChart: React.FC<PriceHistogramChartProps> = ({ compar
             y={22}
             transform="rotate(-90)"
             textAnchor="middle"
-            fill="#57534e"
+            fill="#a1a1aa"
             fontSize="13px"
             fontWeight="500"
             fontFamily="ui-sans-serif, system-ui, sans-serif"
@@ -179,7 +179,7 @@ export const PriceHistogramChart: React.FC<PriceHistogramChartProps> = ({ compar
                   y={y}
                   width={barW}
                   height={Math.max(barH, 0)}
-                  fill={bin.isOutlierBucket ? '#d6d3d1' : isHovered ? '#1c1917' : '#78716c'}
+                  fill={bin.isOutlierBucket ? '#3f3f46' : isHovered ? '#c4b5fd' : '#8b5cf6'}
                   rx="3"
                 />
 
@@ -189,7 +189,7 @@ export const PriceHistogramChart: React.FC<PriceHistogramChartProps> = ({ compar
                     x={x + barW / 2}
                     y={y - 6}
                     textAnchor="middle"
-                    fill="#1c1917"
+                    fill="#f4f4f5"
                     fontSize="11px"
                     fontWeight="600"
                     fontFamily="ui-sans-serif, system-ui, sans-serif"
@@ -206,14 +206,14 @@ export const PriceHistogramChart: React.FC<PriceHistogramChartProps> = ({ compar
                       y1={padding.top + plotHeight}
                       x2={x + barW / 2}
                       y2={padding.top + plotHeight + 5}
-                      stroke="#d6d3d1"
+                      stroke="rgba(255, 255, 255, 0.15)"
                       strokeWidth="1"
                     />
                     <text
                       x={x + barW / 2}
                       y={padding.top + plotHeight + 20}
                       textAnchor="middle"
-                      fill="#57534e"
+                      fill="#d4d4d8"
                       fontSize="12px"
                       fontFamily="ui-sans-serif, system-ui, sans-serif"
                     >
@@ -231,7 +231,7 @@ export const PriceHistogramChart: React.FC<PriceHistogramChartProps> = ({ compar
             y1={padding.top + plotHeight}
             x2={padding.left + plotWidth}
             y2={padding.top + plotHeight}
-            stroke="#a8a29e"
+            stroke="rgba(255, 255, 255, 0.2)"
             strokeWidth="1.25"
           />
 
@@ -246,12 +246,12 @@ export const PriceHistogramChart: React.FC<PriceHistogramChartProps> = ({ compar
               y1={padding.top}
               x2={x25}
               y2={padding.top + plotHeight}
-              stroke="#2563eb"
+              stroke="#38bdf8"
               strokeWidth="2"
               strokeDasharray="5 4"
             />
             {/* Small marker dot at top only */}
-            <circle cx={x25} cy={padding.top} r="4" fill="#2563eb" />
+            <circle cx={x25} cy={padding.top} r="4" fill="#38bdf8" />
           </g>
 
           {/* Percentile Line 2: 75th percentile (dashed purple, marker at top, no floating text) */}
@@ -265,12 +265,12 @@ export const PriceHistogramChart: React.FC<PriceHistogramChartProps> = ({ compar
               y1={padding.top}
               x2={x75}
               y2={padding.top + plotHeight}
-              stroke="#9333ea"
+              stroke="#c084fc"
               strokeWidth="2"
               strokeDasharray="3 3"
             />
             {/* Small marker dot at top only */}
-            <circle cx={x75} cy={padding.top} r="4" fill="#9333ea" />
+            <circle cx={x75} cy={padding.top} r="4" fill="#c084fc" />
           </g>
 
           {/* Percentile Line 3: Median (solid orange, marker at top, no floating text) */}
@@ -284,11 +284,11 @@ export const PriceHistogramChart: React.FC<PriceHistogramChartProps> = ({ compar
               y1={padding.top}
               x2={xMedian}
               y2={padding.top + plotHeight}
-              stroke="#ea580c"
+              stroke="#fb923c"
               strokeWidth="2.5"
             />
             {/* Small marker dot at top only */}
-            <circle cx={xMedian} cy={padding.top} r="4.5" fill="#ea580c" />
+            <circle cx={xMedian} cy={padding.top} r="4.5" fill="#fb923c" />
           </g>
 
           {/* X-axis Title: sits outside tick labels with >12px clearance */}
@@ -296,7 +296,7 @@ export const PriceHistogramChart: React.FC<PriceHistogramChartProps> = ({ compar
             x={padding.left + plotWidth / 2}
             y={padding.top + plotHeight + 48}
             textAnchor="middle"
-            fill="#44403c"
+            fill="#a1a1aa"
             fontSize="13px"
             fontWeight="500"
             fontFamily="ui-sans-serif, system-ui, sans-serif"
@@ -308,32 +308,32 @@ export const PriceHistogramChart: React.FC<PriceHistogramChartProps> = ({ compar
         {/* Hover Tooltip for Percentile Markers */}
         {hoveredMarker !== null && (
           <div
-            className="absolute top-2 bg-stone-900 text-white text-xs px-3 py-1.5 rounded-lg shadow-md border border-stone-700 pointer-events-none font-sans z-20"
+            className="absolute top-2 bg-[#12111d] text-zinc-100 text-xs px-3 py-1.5 rounded-xl shadow-xl border border-white/20 pointer-events-none z-20"
             style={{
               left: hoveredMarker === 'p25' ? `${x25}px` : hoveredMarker === 'median' ? `${xMedian}px` : `${x75}px`,
               transform: 'translateX(-50%)',
             }}
           >
-            {hoveredMarker === 'p25' && <span>25th Percentile: <strong>${stats.p25.toFixed(2)}</strong></span>}
-            {hoveredMarker === 'median' && <span>Median (Recommended): <strong>${stats.median.toFixed(2)}</strong></span>}
-            {hoveredMarker === 'p75' && <span>75th Percentile: <strong>${stats.p75.toFixed(2)}</strong></span>}
+            {hoveredMarker === 'p25' && <span>25th Percentile: <strong className="text-sky-300">${stats.p25.toFixed(2)}</strong></span>}
+            {hoveredMarker === 'median' && <span>Median (Recommended): <strong className="text-orange-300">${stats.median.toFixed(2)}</strong></span>}
+            {hoveredMarker === 'p75' && <span>75th Percentile: <strong className="text-purple-300">${stats.p75.toFixed(2)}</strong></span>}
           </div>
         )}
 
         {/* Hover Tooltip for Bars */}
         {hoveredBin !== null && bins[hoveredBin] && (
-          <div className="absolute top-2 right-4 bg-stone-900 text-white text-xs px-3 py-1.5 rounded-lg shadow-md border border-stone-700 pointer-events-none font-sans z-20">
-            <span className="font-semibold">{bins[hoveredBin].label}:</span>{' '}
-            <span className="text-amber-300 font-bold">{bins[hoveredBin].count}</span> listings (
+          <div className="absolute top-2 right-4 bg-[#12111d] text-zinc-100 text-xs px-3.5 py-1.5 rounded-xl shadow-xl border border-white/20 pointer-events-none z-20">
+            <span className="font-semibold text-zinc-200">{bins[hoveredBin].label}:</span>{' '}
+            <span className="text-violet-300 font-bold">{bins[hoveredBin].count}</span> listings (
             {((bins[hoveredBin].count / stats.count) * 100).toFixed(1)}%)
           </div>
         )}
       </div>
 
-      <div className="mt-3 flex items-center justify-between text-xs text-stone-500 pt-3 border-t border-stone-100 flex-wrap gap-2 font-sans">
+      <div className="mt-4 flex items-center justify-between text-xs text-zinc-400 pt-3 border-t border-white/10 flex-wrap gap-2">
         <span>Min Comps Price: ${stats.minPrice.toFixed(2)}</span>
-        <span className="flex items-center gap-1 text-stone-600">
-          <Info className="w-3.5 h-3.5 text-stone-400" />
+        <span className="flex items-center gap-1.5 text-zinc-400">
+          <Info className="w-3.5 h-3.5 text-violet-400" />
           Linear interpolation: 25th = ${stats.p25.toFixed(2)}, Median = ${stats.median.toFixed(2)}, 75th = ${stats.p75.toFixed(2)}
         </span>
         <span>99th Percentile Cap: ${stats.p99.toFixed(2)}</span>

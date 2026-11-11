@@ -108,33 +108,34 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-stone-100 flex flex-col items-center justify-center p-6 text-stone-800">
-        <div className="w-12 h-12 rounded-xl bg-stone-900 text-amber-400 flex items-center justify-center mb-4 shadow-md">
-          <Building2 className="w-6 h-6 text-amber-400 animate-pulse" />
+      <div className="min-h-screen bg-[#0c0b14] flex flex-col items-center justify-center p-6 text-zinc-100 relative overflow-hidden">
+        <div className="absolute w-[500px] h-[300px] bg-violet-600/15 rounded-full blur-[120px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+        <div className="w-12 h-12 rounded-xl bg-violet-600/20 border border-violet-500/30 text-violet-400 flex items-center justify-center mb-4 shadow-lg shadow-violet-900/20">
+          <Building2 className="w-6 h-6 text-violet-300 animate-pulse" />
         </div>
-        <h2 className="font-serif font-bold text-xl text-stone-900 mb-2">
+        <h2 className="font-semibold text-xl text-zinc-100 mb-1.5 tracking-tight">
           Capital Host Advisory
         </h2>
-        <p className="text-xs text-stone-500 mb-4 font-mono">
+        <p className="text-xs text-zinc-400 mb-4 font-mono">
           Loading Inside Airbnb Washington D.C. dataset (4,500+ records)...
         </p>
-        <Loader2 className="w-6 h-6 animate-spin text-stone-700" />
+        <Loader2 className="w-5 h-5 animate-spin text-violet-400" />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-stone-100 flex flex-col items-center justify-center p-6 text-stone-800">
-        <div className="bg-white p-8 rounded-2xl border border-red-200 shadow-lg max-w-md text-center">
-          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-3" />
-          <h2 className="font-serif font-bold text-lg text-stone-900 mb-1">
+      <div className="min-h-screen bg-[#0c0b14] flex flex-col items-center justify-center p-6 text-zinc-100 relative overflow-hidden">
+        <div className="bg-white/[0.04] p-8 rounded-2xl border border-rose-500/30 shadow-xl max-w-md text-center backdrop-blur-md">
+          <AlertCircle className="w-12 h-12 text-rose-400 mx-auto mb-3" />
+          <h2 className="font-semibold text-lg text-zinc-100 mb-1">
             Data Ingestion Error
           </h2>
-          <p className="text-xs text-stone-600 mb-4">{error}</p>
+          <p className="text-xs text-zinc-400 mb-5 leading-relaxed">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-stone-900 text-white rounded-lg text-xs font-semibold hover:bg-stone-800 transition-colors"
+            className="px-4 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-lg text-xs font-semibold hover:from-violet-500 hover:to-indigo-500 transition-all shadow-md shadow-violet-900/30"
           >
             Retry Connection
           </button>
@@ -144,28 +145,38 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-stone-100 font-sans text-stone-900 flex flex-col antialiased selection:bg-amber-200 selection:text-stone-900">
+    <div className="min-h-screen bg-[#0c0b14] text-zinc-100 flex flex-col antialiased selection:bg-violet-600/40 selection:text-white relative">
+      {/* Ambient background glows */}
+      <div className="pointer-events-none fixed inset-0 overflow-hidden -z-10" aria-hidden="true">
+        {/* Top center large violet blur */}
+        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[720px] h-[400px] bg-violet-600/15 rounded-full blur-[120px]" />
+        {/* Left side indigo blur */}
+        <div className="absolute top-[35%] -left-40 w-[500px] h-[500px] bg-indigo-600/8 rounded-full blur-[100px]" />
+        {/* Right side fuchsia blur */}
+        <div className="absolute top-[65%] -right-40 w-[500px] h-[500px] bg-fuchsia-600/8 rounded-full blur-[100px]" />
+      </div>
+
       <Header />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         {/* Intro banner */}
-        <div className="mb-6">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-2 border-b border-stone-200/80 pb-4">
+        <div className="pb-1">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 border-b border-white/10 pb-5">
             <div>
-              <span className="text-2xs font-bold uppercase tracking-widest text-amber-700 block mb-1">
+              <span className="text-xs font-semibold uppercase tracking-wider text-violet-400 block mb-1">
                 District of Columbia Market Advisory
               </span>
-              <h1 className="text-2xl sm:text-3xl font-serif font-bold tracking-tight text-stone-950">
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-100">
                 Short-Term Rental Pricing Intelligence
               </h1>
-              <p className="text-xs sm:text-sm text-stone-600 mt-1 max-w-2xl">
+              <p className="text-xs sm:text-sm text-zinc-400 mt-1 max-w-2xl leading-relaxed">
                 Independent pricing benchmarks derived from real Inside Airbnb Washington D.C. records.
                 Every figure is mathematically computed in code; Gemini provides grounded strategic context.
               </p>
             </div>
 
-            <div className="flex items-center gap-2 text-2xs font-mono text-stone-500 bg-white px-3 py-1.5 rounded-lg border border-stone-200 shadow-2xs">
-              <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            <div className="flex items-center gap-2 text-xs font-mono text-zinc-400 bg-white/[0.04] px-3 py-1.5 rounded-lg border border-white/10 shrink-0">
+              <span className="w-2 h-2 rounded-full bg-emerald-400" />
               <span>Verified Dataset: {allListings.length.toLocaleString()} total DC listings</span>
             </div>
           </div>
