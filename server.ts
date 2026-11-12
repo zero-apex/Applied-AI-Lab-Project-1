@@ -15,12 +15,22 @@ const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
 app.use(express.json({ limit: '5mb' }));
 
-// Initialize Google Gen AI client
-const apiKey = process.env.GEMINI_API_KEY || '';
-const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
+// Dynamic Google Gen AI client helper ensuring newly configured keys are used immediately
+function getGenAIClient(): GoogleGenAI | null {
+  const key = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || '';
+  if (key) {
+    return new GoogleGenAI({ apiKey: key });
+  }
+  try {
+    return new GoogleGenAI();
+  } catch {
+    return null;
+  }
+}
 
 // POST /api/strategy-explanation
 app.post('/api/strategy-explanation', async (req: Request, res: Response) => {
+  const ai = getGenAIClient();
   try {
     const {
       neighbourhood,
@@ -111,6 +121,7 @@ Only return raw JSON without markdown code fences or backticks.`;
 
 // POST /api/ask-data
 app.post('/api/ask-data', async (req: Request, res: Response) => {
+  const ai = getGenAIClient();
   try {
     const { question, stats, sampleRows } = req.body;
 

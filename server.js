@@ -10,9 +10,19 @@ var __dirname = path.dirname(__filename);
 var app = express();
 var PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3e3;
 app.use(express.json({ limit: "5mb" }));
-var apiKey = process.env.GEMINI_API_KEY || "";
-var ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
+function getGenAIClient() {
+  const key = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || "";
+  if (key) {
+    return new GoogleGenAI({ apiKey: key });
+  }
+  try {
+    return new GoogleGenAI();
+  } catch {
+    return null;
+  }
+}
 app.post("/api/strategy-explanation", async (req, res) => {
+  const ai = getGenAIClient();
   try {
     const {
       neighbourhood,
@@ -96,6 +106,7 @@ Only return raw JSON without markdown code fences or backticks.`;
   }
 });
 app.post("/api/ask-data", async (req, res) => {
+  const ai = getGenAIClient();
   try {
     const { question, stats, sampleRows } = req.body;
     if (!question) {
